@@ -8,10 +8,10 @@ BUILD_DIR := build
 
 INCLUDES := $(addprefix -I./,$(wildcard $(LIB_DIR)/*))
 
-TEST_OBJS := $(notdir $(wildcard $(LIB_DIR)/*/*.c) $(wildcard $(TEST_DIR)/*.c))
+TEST_OBJS := $(notdir) $(wildcard $(LIB_DIR)/*/*.c) $(wildcard $(TEST_DIR)/*.c))
 TEST_OBJS := $(addprefix $(BUILD_DIR)/,$(TEST_OBJS:.c=.o))
 
-PROG_OBJS := $(notdir $(wildcard $(LIB_DIR)/buffer/*.c)
+PROG_OBJS := $(notdir) $(wildcard $(LIB_DIR)/buffer/*.c)
 PROG_OBJS := $(addprefix $(BUILD_DIR)/,$(PROG_OBJS:.c=.o))
 
 all: .mkbuild $(PROG_EXE) $(TEST_EXE)
