@@ -2,9 +2,6 @@ all: mkbuild program build_test
 
 .PHONY: all mkbuild build_test check clean
 
-program: build/buffer.o
-	gcc -o build/buffer.o
-
 build/buffer.o: lib/buffer/buffer.c lib/buffer/buffer.h
 	gcc -c lib/buffer/buffer.c -o build/buffer.o
 
