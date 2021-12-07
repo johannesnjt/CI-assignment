@@ -1,61 +1,17 @@
-CC := gcc
-CFLAGS := -Wall
+build/test.exe: build/buffer.o build/unity.o build/buffer_test.o
+	gcc -o build/test.exe build/buffer.o build/unity.o build/test.o
 
-LIB_DIR := lib
-TEST_DIR := test
-TEST_EXE := test
-BUILD_DIR := build
+build/buffer.o: lib/fizzbuzz/fizzbuzz.c lib/fizzbuzz/fizzbuzz.h
+	gcc -c lib/fizzbuzz/fizzbuzz.c -o build/fizzbuzz.o
 
-INCLUDES := $(addprefix -I./,$(wildcard $(LIB_DIR)/*))
+build/unity.o: lib/unity/unity.c lib/unity/unity.h lib/unity/unity_internals.h
+	gcc -c lib/unity/unity.c -o build/unity.o
 
-TEST_OBJS := $(notdir) $(wildcard $(LIB_DIR)/*/*.c) $(wildcard $(TEST_DIR)/*.c))
-TEST_OBJS := $(addprefix $(BUILD_DIR)/,$(TEST_OBJS:.c=.o))
+build/test.o: test/buffer_test.c lib/buffer/buffer.h lib/unity/unity.h
+	gcc -c test/test.c -I./lib/unity -I./lib/buffer -o build/test.o
 
-PROG_OBJS := $(notdir) $(wildcard $(LIB_DIR)/buffer/*.c)
-PROG_OBJS := $(addprefix $(BUILD_DIR)/,$(PROG_OBJS:.c=.o))
+mkbuild:
+	mkdir -p build
 
-all: .mkbuild $(PROG_EXE) $(TEST_EXE)
-	@echo "************ The Targets ************"
-	@echo "** clean: to clean"
-	@echo "** check: to run the test"
-	@echo "** run NUM=xxx: to run the program"
-	@echo "*************************************"
-
-$(PROG_EXE): $(PROG_OBJS)
-	$(CC) $^ -lm -o $(BUILD_DIR)/$@
-
-$(TEST_EXE): $(TEST_OBJS)
-	$(CC) $^ -lm -o $(BUILD_DIR)/$@
-
-LIB_SRC := $(LIB_DIR)/*
-$(BUILD_DIR)/%.o: $(LIB_SRC)/%.c
-	$(CC) -MMD $(CFLAGS) -o $@ -c $<
-
-$(BUILD_DIR)/%.o : $(TEST_DIR)/%.c
-	$(CC) -MMD $(CFLAGS) -o $@ $(INCLUDES) -c $<
-
-run: .mkbuild $(PROG_EXE)
-	@echo ""
-	@echo "**************************************"
-	@echo "********* Run The Program ************"
-	@echo "**************************************"
-	@echo ""
-	@./$(BUILD_DIR)/$(PROG_EXE) $(NUM)
-
-check: .mkbuild $(TEST_DIR)
-	@echo ""
-	@echo "**************************************"
-	@echo "********** Run The Test **************"
-	@echo "**************************************"
-	@echo ""
-	@./$(BUILD_DIR)/$(TEST_EXE)
-
--include $(OBJECTS:.o=.d)
-
-.PHONY: clean .mkbuild check all
-
-clean:
-	@rm -rf $(BUILD_DIR)
-
-.mkbuild:
-	@mkdir -p $(BUILD_DIR)
+clean: 
+	rm -rf build
