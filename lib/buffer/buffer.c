@@ -32,10 +32,10 @@ uint64_t buffer_extract(uint8_t *buffer, uint8_t start, uint8_t length)
     //while
     // data |= etta eller nolla beroende på vad som finns i buff
 
-    while (/* condition */)
+    /*while (condition )
     {
-        /* code */
+            code
     }
 
     return data;
-}
+}*/
