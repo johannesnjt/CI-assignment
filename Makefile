@@ -1,3 +1,5 @@
+all: mkbuild program build_test
+
 .PHONY: all mkbuild build_test check clean
 
 build/buffer.o: lib/buffer/buffer.c lib/buffer/buffer.h
